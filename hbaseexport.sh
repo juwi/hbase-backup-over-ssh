@@ -239,8 +239,8 @@ if [ "$ACTION" == "run" ]; then
 			hadoop fs -rm /export/$TABLE.backup 
 		fi
 	elif [ "$METHOD" == "pull" ]; then # remote to local
-		ssh -p $REMOTE_SSH_PORT -i $LOCAL_KEY_FILE $REMOTE_USER@$REMOTE_HOST "cat $REMOTEDIR/* > $REMOTE_DIR/full_backup"
-		hadoop fs -put `ssh -p $REMOTE_SSH_PORT -i $LOCAL_KEY_FILE $REMOTE_USER@$REMOTE_HOST "cat $REMOTE_DIR/full_backup"` /import/$TABLE		
+		ssh -p $REMOTE_SSH_PORT -i $LOCAL_KEY_FILE $REMOTE_USER@$REMOTE_HOST "cat $REMOTE_DIR/$TABLE.backup_* > $REMOTE_DIR/$TABLE.full_backup"
+		hadoop fs -put `ssh -p $REMOTE_SSH_PORT -i $LOCAL_KEY_FILE $REMOTE_USER@$REMOTE_HOST "cat $REMOTE_DIR/$TABLE.full_backup"` /import/$TABLE		
 		hadoop jar $HBSE_PATH/hbase.jar import $TABLE /import/$TABLE
 	else
 		echo " ** Incorrect method selected: $METHOD (should be 'push' or 'pull')" # print to screen
